@@ -22,7 +22,7 @@ pipeline {
             steps{
                 script {
                     def customImage = docker.build("shubhamjadhav1715/petclinic:${env.BUILD_NUMBER}", "./docker")
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
                     customImage.push()    
                 }
             }
@@ -30,7 +30,7 @@ pipeline {
     }
     stage('Build on kubernetes'){
         steps {
-            withKubeConfig([credentialsId: 'kubeconfig']) {
+            withKubeConfig([credentialsId: 'kube-cred']) {
                 sh 'pwd'
                 sh 'cp -R helm/* .'
                 sh 'ls -ltrh'
